@@ -1,0 +1,116 @@
+{
+  "info": {
+    "name": "Rails Idempotent Service API",
+    "_postman_id": "b1c2d3e4-fake-id-1234",
+    "description": "Test collection for idempotent request processing service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000"
+    }
+  ],
+  "item": [
+    {
+      "name": "Create Request (New)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"idempotency_key\": \"abc-123\",\n  \"payload\": { \"amount\": 100 }\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/requests",
+          "host": ["{{base_url}}"],
+          "path": ["requests"]
+        }
+      }
+    },
+    {
+      "name": "Create Request (Duplicate)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"idempotency_key\": \"abc-123\",\n  \"payload\": { \"amount\": 100 }\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/requests",
+          "host": ["{{base_url}}"],
+          "path": ["requests"]
+        }
+      }
+    },
+    {
+      "name": "Create Request (Different Key)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"idempotency_key\": \"xyz-789\",\n  \"payload\": { \"amount\": 200 }\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/requests",
+          "host": ["{{base_url}}"],
+          "path": ["requests"]
+        }
+      }
+    },
+    {
+      "name": "Cancel Request",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/requests/1/cancel",
+          "host": ["{{base_url}}"],
+          "path": ["requests", "1", "cancel"]
+        }
+      }
+    },
+    {
+      "name": "Cancel Already Processing (Conflict)",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/requests/1/cancel",
+          "host": ["{{base_url}}"],
+          "path": ["requests", "1", "cancel"]
+        }
+      }
+    },
+    {
+      "name": "Invalid Request (Missing Key)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"payload\": { \"amount\": 100 }\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/requests",
+          "host": ["{{base_url}}"],
+          "path": ["requests"]
+        }
+      }
+    }
+  ]
+}
