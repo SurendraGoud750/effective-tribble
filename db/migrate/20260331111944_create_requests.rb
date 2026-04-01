@@ -3,7 +3,7 @@ class CreateRequests < ActiveRecord::Migration[8.1]
     create_table :requests do |t|
       t.string :idempotency_key, null: false
       t.integer :status, default: 0
-      t.json :payload
+      t.jsonb :payload
       t.text :error_message
 
       t.timestamps
